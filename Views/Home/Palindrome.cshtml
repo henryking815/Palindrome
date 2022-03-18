@@ -1,0 +1,134 @@
+﻿@model HKingPalindrome.Models.Palindrome
+
+@{
+    ViewData["Title"] = "Palindrome";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script language="JavaScript">
+    function checkIfPalindrome() {
+        var num = $('#num').val();
+        if (num == "" || parseInt(num) < 1) {
+            $('#num').val("");
+            $('#palLabel').text("");
+            $('#icon').html('<input id="box" class="no_border" type="text" size="1" readonly="readonly" value="&#x2753">');
+            $('#body_pic').attr('visibility', 'hidden');
+            hideImage();
+
+            return;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/Home/CheckForPalindrome",
+            data: {'num': num},
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                // convert response to json string version of Palindrome
+                JSON.stringify(response.isPalindrome);
+                // update form
+                if (response.isPalindrome) {
+                    $('#pal_label').text("YES");
+                    $('#icon').html('<input id="box" class="no_border" type="text" size="1" readonly="readonly" value="&#x2705">');
+                    $('#body_pic').css('visibility', 'visible');
+                } else {
+                    $('#pal_label').text("NO");
+                    $('#icon').html('<input id="box" class="no_border" type="text" size="1" readonly="readonly" value="&#x274C">');
+                    hideImage();
+                }
+            },
+            failure: function (response) {
+                alert("Failure calling ../Home/CheckForPalindrome");
+            },
+            error: function (response) {
+                alert("Error calling ../Home/CheckForPalindrome");
+            }
+        });
+    }
+
+    function hideImage() {
+        if ($('#body_pic').is(":visible")) {
+            $('#body_pic').css('visibility', 'hidden');
+        }
+    }
+</script>
+
+<style>
+
+    .label {
+        display: inline;
+        padding-left: 1%;
+    }
+
+    .no_border {
+        border: none;
+    }
+
+    .disp_flex {
+        display: flex;
+    }
+
+    .width_35 {
+        width: 35%;
+    }
+
+    .flex {
+        flex: 1;
+    }
+
+    .auto {
+        width: 50%;
+        margin: auto;
+    }
+
+    #body_pic {
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+    }
+
+        #body_pic img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        }
+</style>
+
+<body>
+    <div id="body_pic" style="visibility:hidden">
+        <img src="~/palindrome-bob.png">
+    </div>
+    <div>
+        <h4>Palindrome</h4>
+        <hr />
+        <div class="disp_flex">
+            <div class="width_35">
+                @Html.DisplayNameFor(Model => Model.Number)
+            </div>
+            <div class="flex">
+                <input type="number" name="num" id="num" min="1" oninput="if (this.value < 0) this.value = 1; checkIfPalindrome();" onblur="if (this.value < 0) this.value = 1;">
+            </div>
+        </div>
+        <br />
+
+        <div class="disp_flex">
+            <div class="width_35">
+                @Html.DisplayNameFor(Model => Model.IsPalindrome)
+                <label class="label" id="pal_label"></label>
+            </div>
+            <div class="flex" id="icon">
+                <input id="box" class="no_border" type="text" size="1" readonly="readonly" value="&#x2753" />
+            </div>
+        </div>
+    </div>
+</body>
+<br />
+
+<div class="auto">
+    <a asp-action="Index">Back to Home</a>
+</div>

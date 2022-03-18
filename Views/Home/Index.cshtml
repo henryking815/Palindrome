@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    #body_pic {
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+    }
+
+        #body_pic img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        }
+
+    #pic {
+        opacity: 0.9;
+        animation: fade 4s linear backwards;
+    }   
+
+
+    @@keyframes fade {
+        0%,100% { opacity: 0.1 }
+        50% { opacity: 0.9 }
+    }
+</style>
+<body>
+    <div id="body_pic">
+        <img id="pic" src="~/palindrome.jpeg">
+    </div>
+    <div class="text-center">
+        <h1 class="display-5">Exercise #6</h1>
+        <h2 class="display-5">Click the Palindrome tab above to test input</h2>
+    </div>
+</body>
